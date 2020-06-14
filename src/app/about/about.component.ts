@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { of, scheduled, concat } from 'rxjs';
 import { concatAll } from 'rxjs/operators';
+import { createHttpObservable } from '../common/util';
 
 @Component({
   selector: 'about',
@@ -13,12 +14,11 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
 
-    const source1$ = of(1, 2, 3);
-    const source2$ = of(4, 5, 6);
+    const http$ = createHttpObservable('/api/courses');
 
-    const res$ = concat(source2$, source1$);
+    const sub = http$.subscribe();
 
-    res$.subscribe(console.log);
+    setTimeout(() => sub.unsubscribe(), 0);
   }
 
 }

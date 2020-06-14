@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import {fromEvent} from 'rxjs';
 import {concatMap, distinctUntilChanged, exhaustMap, filter, mergeMap} from 'rxjs/operators';
 import {fromPromise} from 'rxjs/internal-compatibility';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
     selector: 'course-dialog',
@@ -59,8 +60,9 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
 
 
     ngAfterViewInit() {
-
-
+        fromEvent(this.saveButton.nativeElement, 'click').pipe(
+            exhaustMap(() => this.saveCourse(this.form.value))
+        ).subscribe();
     }
 
 
