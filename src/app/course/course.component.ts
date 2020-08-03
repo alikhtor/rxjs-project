@@ -11,7 +11,7 @@ import {
     concatMap,
     switchMap,
     withLatestFrom,
-    concatAll, shareReplay, debounce
+    concatAll, shareReplay, debounce, bufferTime
 } from 'rxjs/operators';
 import {merge, fromEvent, Observable, concat} from 'rxjs';
 import {Lesson} from '../model/lesson';
@@ -30,8 +30,12 @@ export class CourseComponent implements OnInit, AfterViewInit {
     course$: Observable<Course>;
     lessons$: Observable<Lesson[]>;
 
+    prev: any;
+    curr: any;
+
 
     @ViewChild('searchInput', { static: true }) input: ElementRef;
+    // @ViewChild('clickMe') clickMe: ElementRef;
 
     constructor(private route: ActivatedRoute) {
 
@@ -49,9 +53,18 @@ export class CourseComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
 
+        // const clickMe$ = fromEvent<any>(this.clickMe.nativeElement, 'click').pipe(
+        //     bufferTime(3000),
+        //     tap(event => {
+        //         console.log(event.length);
+        //     }),
+        // );
+        // clickMe$.subscribe();
+
+
         const searchLessons$ = fromEvent<any>(this.input.nativeElement, 'keyup')
             .pipe(
-                // tap(event => console.log(event.target.value)),
+                // tap(event => console.log(event)),
                 map(event => event.target.value),
                 debounceTime(600),
                 distinctUntilChanged(),
